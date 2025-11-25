@@ -37,6 +37,7 @@ public class MovableObject : MonoBehaviour
                 if (hit.gameObject == this.gameObject)
                 {
                     Debug.Log("Tambah Koin +1");
+                    Destroy(gameObject);
                 }
             }
             else
