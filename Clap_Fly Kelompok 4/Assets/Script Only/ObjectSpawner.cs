@@ -32,21 +32,39 @@ public class ObjectSpawner : MonoBehaviour
         int side = Random.Range(0, 4);
 
         Vector2 spawnPos = Vector2.zero;
+        float zRotation = 0f; // default
 
         switch (side)
         {
-            case 0: spawnPos = GetRandomPointInArea(topArea); break;
-            case 1: spawnPos = GetRandomPointInArea(bottomArea); break;
-            case 2: spawnPos = GetRandomPointInArea(leftArea); break;
-            case 3: spawnPos = GetRandomPointInArea(rightArea); break;
+            case 0: // TOP
+                spawnPos = GetRandomPointInArea(topArea);
+                zRotation = 0f;
+                break;
+
+            case 1: // BOTTOM
+                spawnPos = GetRandomPointInArea(bottomArea);
+                zRotation = 180f;
+                break;
+
+            case 2: // LEFT
+                spawnPos = GetRandomPointInArea(leftArea);
+                zRotation = -90f;
+                break;
+
+            case 3: // RIGHT
+                spawnPos = GetRandomPointInArea(rightArea);
+                zRotation = 90f;
+                break;
         }
 
-        GameObject obj = Instantiate(prefab, spawnPos, Quaternion.identity);
+        GameObject obj = Instantiate(prefab, spawnPos, Quaternion.Euler(0, 0, zRotation));
 
         MovableObject mo = obj.GetComponent<MovableObject>();
         if (mo != null)
             mo.targetPosition = targetPoint.position;
     }
+
+
 
     // Ambil posisi random dari BoxCollider2D area
     Vector2 GetRandomPointInArea(BoxCollider2D area)
