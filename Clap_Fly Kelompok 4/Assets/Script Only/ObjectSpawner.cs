@@ -1,8 +1,9 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ObjectSpawner : MonoBehaviour
 {
     public GameObject prefab;
+    public int score = 0;
 
     [Header("Spawn Areas (gunakan BoxCollider2D)")]
     public BoxCollider2D topArea;
@@ -12,6 +13,9 @@ public class ObjectSpawner : MonoBehaviour
 
     public Transform targetPoint;
     public float spawnDelay = 5f;
+
+    // EVENT — will notify UI script whenever score changes
+    public event System.Action<int> OnScoreChanged;
 
     void Start()
     {
@@ -32,7 +36,7 @@ public class ObjectSpawner : MonoBehaviour
         int side = Random.Range(0, 4);
 
         Vector2 spawnPos = Vector2.zero;
-        float zRotation = 0f; // default
+        float zRotation = 0f;
 
         switch (side)
         {
@@ -64,9 +68,6 @@ public class ObjectSpawner : MonoBehaviour
             mo.targetPosition = targetPoint.position;
     }
 
-
-
-    // Ambil posisi random dari BoxCollider2D area
     Vector2 GetRandomPointInArea(BoxCollider2D area)
     {
         Vector2 size = area.size;
@@ -76,5 +77,12 @@ public class ObjectSpawner : MonoBehaviour
         float randomY = Random.Range(center.y - size.y / 2, center.y + size.y / 2);
 
         return new Vector2(randomX, randomY);
+    }
+
+    // Add point + notify UI
+    public void addpoint()
+    {
+        score++;
+        OnScoreChanged?.Invoke(score);   // 🔴 tells ScoreUI to update UI
     }
 }
